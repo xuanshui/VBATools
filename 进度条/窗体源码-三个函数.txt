@@ -1,0 +1,35 @@
+'窗体中的三个函数：Start、ShowBar、Quit
+
+Public Sub Start()
+    Load processBar
+    processBar.Show 0
+    '设置bar的宽度为1
+    bar.Width = 1
+    '初始化的时候，记录函数的开始时间
+    testBar.funcBeginTime = Now
+End Sub
+
+Public Sub ShowBar(ByVal count As Long, ByVal allCount As Long, ByVal msgContent As String, Optional ByVal msgTitle As String = "脚本运行中，请等待……")
+    '1、更新进度条弹窗的标题
+    processBar.Caption = "开始时间" & CStr(testBar.scriptBeginTime) & "，已运行" & Abs(DateDiff("s", Now, testBar.scriptBeginTime)) & "秒"
+    '2、更新进度条宽度
+    processBar.bar.Width = (count / allCount) * processBar.backBar.Width
+    '3、更新Title内容
+    processBar.Title.Caption = msgTitle
+    '4、更新Content内容，预估函数的剩余时间
+    Dim usedTime As Long, remainingTime As Long
+    usedTime = Abs(DateDiff("s", Now, testBar.funcBeginTime))
+    remainingTime = allCount / (count + 1) * usedTime - usedTime    '已完成工作量/总工作量=已运行时间/总运行时间，剩余运行时间=总运行时间-已运行时间
+    processBar.Content.Caption = msgContent & "，预计还需" & remainingTime & "秒"
+    '5、更新backBar的标题进度
+    processBar.backBar.Caption = CStr(Round((count / allCount) * 100, 4)) & "%"
+    
+    If count Mod 100 = 0 Then        '必须加上DoEvents，否则进度条不会刷新，但是DoEvents的调用频率不能太高，否则脚本运行速度骤降
+        DoEvents
+    End If
+End Sub
+
+Public Sub Quit()
+    Unload processBar
+End Sub
+
