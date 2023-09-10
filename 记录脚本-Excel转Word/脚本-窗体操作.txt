@@ -1,0 +1,38 @@
+'复合框-下拉框
+Private Sub ComboBox1_Change()                 '每次下拉操作，脚本就会执行的动作
+    Debug.Print "已选择" & ComboBox1.Value
+    test.g_a1 = ComboBox1.Value
+End Sub
+
+'命令按钮-确认按钮：点击之后，给模块的变量赋值
+Private Sub CommandButton1_Click()
+    test.g_a1 = ComboBox1.Value
+    
+    test.g_a2 = ToggleButton1.Value
+    test.g_a3 = OptionButton1.Value
+    test.g_a4 = CheckBox1.Value
+    test.g_a5 = TextBox1.Value      '文本框那些没啥好说的，直接获取它的value就行了
+    
+    Debug.Print "值：" & test.g_a1
+    Unload test_form1
+End Sub
+
+'切换按钮-按下表示True，未按下表示False
+Private Sub ToggleButton1_Click()
+    If ToggleButton1.Value = True Then
+      ToggleButton1.Caption = "优化已打开"      '调整按下之后显示的字体
+      ToggleButton1.BackColor = &HFFFFC0        '调整按下之后的颜色为蓝青色
+    Else
+      ToggleButton1.Caption = "优化已关闭"      '调整未按下时显示的字体
+      ToggleButton1.BackColor = &HE0E0E0        '调整未按下时的颜色为灰色
+    End If
+End Sub
+
+Private Sub UserForm_Initialize()
+    '下拉框的初始化
+    ComboBox1.List = arr_Interval               '给下拉框的选项赋值，把已经初始化的数组赋值给List即可
+    ComboBox1.ListIndex = 0                     '下拉框默认展示第一个下拉选项
+    'ComboBox1.Style = fmStyleDropDownCombo     '用户既能手动输入，也能从下拉选项中选择
+    ComboBox1.Style = fmStyleDropDownList       '用户只能从下拉选项中选择
+End Sub
+
